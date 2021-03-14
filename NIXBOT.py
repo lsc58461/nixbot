@@ -1,5 +1,6 @@
 #pyinstaller --icon=NIX.ico --onefile NIXBOT.py
 
+import os
 import discord
 import datetime
 import re
