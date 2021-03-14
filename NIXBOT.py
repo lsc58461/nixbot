@@ -19,7 +19,8 @@ now = datetime.datetime.now()
 
 URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
 Channel_ID = int(config['Data']['Channel_ID'])
-Token = config['Data']['Token']
+Token = os.environ["BOT_TOKEN"]
+
 a = 0
 
 @tasks.loop(seconds=3)
