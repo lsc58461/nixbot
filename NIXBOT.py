@@ -11,6 +11,8 @@ from itertools import cycle
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
+heroku config:add TZ="Asia/Seoul"
+
 config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
