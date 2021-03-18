@@ -19,7 +19,7 @@ status = cycle(['Produced By JeongYun','NIX 3.5'])
 now = datetime.datetime.now()
 
 URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
-Channel_ID = os.environ["Channel_ID"]
+Channel_ID = int(os.environ["Channel_ID"])
 Token = os.environ["Token"]
 
 a = 0
