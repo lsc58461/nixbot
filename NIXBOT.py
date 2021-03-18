@@ -15,12 +15,12 @@ config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = '!')
-status = cycle(['Produced By JeongYun','NIX 3.0'])
+status = cycle(['Produced By JeongYun','NIX 3.5'])
 now = datetime.datetime.now()
 
 URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
-Channel_ID = int(config['Data']['Channel_ID'])
-Token = os.environ["BOT_TOKEN"]
+Channel_ID = os.environ["Channel_ID"]
+Token = os.environ["Token"]
 
 a = 0
 
@@ -42,20 +42,20 @@ async def mains():
         soup = BeautifulSoup(URL, 'html.parser')
         PatchNote_URL_find = soup.find('a', {'class': 'style__Wrapper-i44rc3-0 style__ResponsiveWrapper-i44rc3-13 gkCnQM isVisible'})
         PatchNote_URL = "https://kr.leagueoflegends.com" + PatchNote_URL_find.get('href')
-        print(f"{now})패치노트 URL:\n{PatchNote_URL}")
+        print(f"{now})  패치노트 URL:\n{PatchNote_URL}")
 
         #패치노트 이미지 주소
         soup = BeautifulSoup(URL, 'html.parser')
         for a in soup.find('a'):
             if a.img:
                 PatchNote_Image_URL = a.img['src']
-                print(f"{now})이미지 URL:\n{PatchNote_Image_URL}")
+                print(f"{now})  이미지 URL:\n{PatchNote_Image_URL}")
 
         #패치노트 제목
         soup = BeautifulSoup(URL, "html.parser")
         for a in soup.find('h2'):
             PatchNote_Title = a.string
-            print(f"{now})패치노트 TITLE:{PatchNote_Title}")
+            print(f"{now})  패치노트 TITLE:{PatchNote_Title}")
 
         config['Data'] = {}
         config['Data']['title'] = PatchNote_Title
@@ -65,7 +65,7 @@ async def mains():
         config.read('Data.ini', encoding='UTF-8-SIG') 
         config.sections()
         title2 = config['Data']['title']
-        print(f"{now})패치노트 세이브 TITLE:{title2}")
+        print(f"{now})  패치노트 세이브 TITLE:{title2}")
 
         PatchNote_URL2 = urlopen(PatchNote_URL).read()
         soup = BeautifulSoup(PatchNote_URL2, "html.parser")
@@ -99,12 +99,13 @@ async def mains():
         )
         '''     
         await channel.send(embed=MyEmbed)
-        print(f"{now})------------    패치노트 전송 성공    ------------")
-        print(f"{now})------------    a == {a}    ------------")
+        print(f"{now})  패치노트 전송 성공")
+        print(f"{now})a == {a}")
         a = 1
 
 @tasks.loop(seconds=10)
 async def Title_Detected():
+    URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
     now = datetime.datetime.now()
     global a
     soup = BeautifulSoup(URL, "html.parser")
@@ -115,17 +116,17 @@ async def Title_Detected():
     config.read('Data.ini', encoding='UTF-8-SIG') 
     config.sections()
     title2 = config['Data']['title']
-    print(f"{now})패치노트 감지 중")
+    print(f"{now})  패치노트 감지 중 : {PatchNote_Title}")
     if title2 != PatchNote_Title:
         a = 0
-        print(f"{now})----- 패치노트 제목 변경감지 -----\n패치노트 제목:{PatchNote_Title}")
+        print(f"{now})  패치노트 제목 변경감지\n패치노트 제목:{PatchNote_Title}")
 
 @client.event
 async def on_ready():
-    print(f"{now})------------    CONNECTED    ------------")
+    print(f"{now})---------------    CONNECTED    ---------------")
     print(f"{now})  봇 이름 : {client.user.name}")
     print(f"{now})  봇 ID : {client.user.id}")
-    print(f"{now})------------------------------------------------")
+    print(f"{now})-----------------------------------------------")
 
     change_status.start()
     mains.start()
