@@ -36,7 +36,7 @@ async def mains():
     global a
     now = datetime.datetime.now()
     if a == 0:
-        print(f"{now})  시작")
+        print(f"{now})  전송 시작")
         channel = client.get_channel(Channel_ID)
         print(f"{now})  채널 ID : {channel}\n{Channel_ID}")
         URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
