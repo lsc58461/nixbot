@@ -15,7 +15,7 @@ config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = '!')
-status = cycle(['Produced By JeongYun','NIX 3.5'])
+status = cycle(['Produced By JeongYun','NIX 3.6'])
 now = datetime.datetime.now()
 
 URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
@@ -103,7 +103,7 @@ async def mains():
         '''     
         await channel.send(embed=MyEmbed)
         print(f"{now})  패치노트 전송 성공")
-        print(f"{now})a == {a}")
+        print(f"{now})  a == {a}")
         a = 1
 
 @tasks.loop(seconds=10)
