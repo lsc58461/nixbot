@@ -122,7 +122,7 @@ async def Title_Detected():
     print(f"{now})  패치노트 감지 중 : {PatchNote_Title}")
     if title2 != PatchNote_Title:
         a = 0
-        print(f"{now})  패치노트 제목 변경감지\n패치노트 제목:{PatchNote_Title}")
+        print(f"{now})  패치노트 제목 변경감지\n{now}  패치노트 제목:{PatchNote_Title}")
 
 @client.event
 async def on_ready():
