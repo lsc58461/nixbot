@@ -21,6 +21,9 @@ now = datetime.datetime.now()
 URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
 Channel_ID = int(os.environ["Channel_ID"])
 Token = os.environ["Token"]
+config.read('Data.ini', encoding='UTF-8-SIG') 
+config.sections()
+title2 = config['Data']['title']
 
 a = 0
 
@@ -127,9 +130,9 @@ async def on_ready():
     print(f"{now})  봇 이름 : {client.user.name}")
     print(f"{now})  봇 ID : {client.user.id}")
     print(f"{now})-----------------------------------------------")
-
+    
+    Title_Detected.start()
     change_status.start()
     mains.start()
-    Title_Detected.start()
     
 client.run(Token)
