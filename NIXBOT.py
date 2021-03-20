@@ -8,7 +8,7 @@ import configparser
 
 from discord.ext import commands, tasks
 from itertools import cycle
-from urllib.request import urlopen
+import requests_async as requests
 from bs4 import BeautifulSoup
 
 config = configparser.ConfigParser()
@@ -18,7 +18,6 @@ client = commands.Bot(command_prefix = '!')
 status = cycle(['Produced By JeongYun','NIX 3.5'])
 now = datetime.datetime.now()
 
-URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
 Channel_ID = int(os.environ["Channel_ID"])
 Token = os.environ["Token"]
 
@@ -36,7 +35,8 @@ async def mains():
         print(f"{now})  시작")
         channel = client.get_channel(Channel_ID)
         print(f"{now})  채널 ID : {channel}\n{Channel_ID}")
-        URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
+        URL = await requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
+        URL = URL.text
 
         #패치노트 주소
         soup = BeautifulSoup(URL, 'html.parser')
@@ -67,8 +67,8 @@ async def mains():
         title2 = config['Data']['title']
         print(f"{now})  패치노트 세이브 TITLE:{title2}")
 
-        PatchNote_URL2 = urlopen(PatchNote_URL).read()
-        soup = BeautifulSoup(PatchNote_URL2, "html.parser")
+        PatchNote_URL2 = await requests.get(PatchNote_URL)
+        soup = BeautifulSoup(PatchNote_URL2.text, "html.parser")
         PatchNote_Text = soup.find('blockquote', {'class': 'blockquote context'})
         PatchNote_Text = re.sub('<.+?>', '', str(PatchNote_Text), 0).strip()
         #print(f"PATCHNOTE TEXT:{PatchNote_Text}")
@@ -105,10 +105,10 @@ async def mains():
 
 @tasks.loop(seconds=10)
 async def Title_Detected():
-    URL = urlopen("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes").read()
+    URL = await requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
     now = datetime.datetime.now()
     global a
-    soup = BeautifulSoup(URL, "html.parser")
+    soup = BeautifulSoup(URL.text, "html.parser")
     for a in soup.find('h2'):
         PatchNote_Title = a.string
     #print(f"{now})")
