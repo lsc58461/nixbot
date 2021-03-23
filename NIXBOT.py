@@ -7,6 +7,7 @@ import re
 import configparser
 import requests_async as requests
 
+from ftplib import FTP
 from urllib import request
 from discord.ext import commands, tasks
 from itertools import cycle
