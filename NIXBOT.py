@@ -27,7 +27,7 @@ config.read(Data_File, encoding='UTF-8-SIG')
 config.sections()
 title2 = config['Data']['title']
 FileName = Data_File
-ftp = FTP(os.environ["Server_Address"])
+ftp = FTP('fxserver.dothome.co.kr')
 ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
 ftp.cwd('html/DATA')
 
