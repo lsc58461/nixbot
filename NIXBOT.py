@@ -20,14 +20,14 @@ client = commands.Bot(command_prefix = '!')
 status = cycle(['Produced By JeongYun','NIX 3.6'])
 now = datetime.datetime.now()
 Data_File = 'Data.ini'
+FileName = Data_File
 Data_URL = os.environ["Data_URL"]
-
 Channel_ID = int(os.environ["Channel_ID"])
 Token = os.environ["Token"]
 config.read(Data_File, encoding='UTF-8-SIG') 
 config.sections()
 title2 = config['Data']['title']
-FileName = Data_File
+
 ftp = FTP('fxserver.dothome.co.kr')
 ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
 ftp.cwd('html/DATA')
@@ -157,8 +157,8 @@ async def on_ready():
     print(f"{now})  봇 ID : {client.user.id}")
     print(f"{now})-----------------------------------------------")
     
-    Title_Detected.start()
     change_status.start()
     mains.start()
+    Title_Detected.start()
     
 client.run(Token)
