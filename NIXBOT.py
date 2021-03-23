@@ -18,10 +18,12 @@ config.sections()
 client = commands.Bot(command_prefix = '!')
 status = cycle(['Produced By JeongYun','NIX 3.6'])
 now = datetime.datetime.now()
+Data_File = 'Data.ini'
+Data_URL = os.environ["Data_URL"]
 
 Channel_ID = int(os.environ["Channel_ID"])
 Token = os.environ["Token"]
-config.read('Data.ini', encoding='UTF-8-SIG') 
+config.read(Data_File, encoding='UTF-8-SIG') 
 config.sections()
 title2 = config['Data']['title']
 FileName = Data_File
@@ -67,10 +69,10 @@ async def mains():
 
         config['Data'] = {}
         config['Data']['title'] = PatchNote_Title
-        with open('Data.ini', 'w', encoding='UTF-8-SIG') as configfile:
+        with open(Data_File, 'w', encoding='UTF-8-SIG') as configfile:
             config.write(configfile)
 
-        config.read('Data.ini', encoding='UTF-8-SIG') 
+        config.read(Data_File, encoding='UTF-8-SIG') 
         config.sections()
         title2 = config['Data']['title']
         print(f"{now})  패치노트 세이브 TITLE:{title2}")
