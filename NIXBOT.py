@@ -122,10 +122,10 @@ async def Title_Detected():
     soup = BeautifulSoup(URL.text, "html.parser")
     for a in soup.find('h2'):
         PatchNote_Title = a.string
-    #print(f"{now})")
+    
     File_Save = Data_File
-
     mem = request.urlopen(Data_URL).read()
+
     with open(File_Save, mode="wb") as f:
         f.write(mem)
         print((f"{now})  FTP Data.ini 다운로드 완료"))
@@ -136,12 +136,18 @@ async def Title_Detected():
     
     print(f"{now})  패치노트 감지 중:{PatchNote_Title}")
     if title2 != PatchNote_Title:
-        a = 0
         print(f"{now})  패치노트 제목 변경감지\n{now})  패치노트 제목:{PatchNote_Title}")
+        
+        config['Data'] = {}
+        config['Data']['title'] = PatchNote_Title
+        with open(Data_File, 'w', encoding='UTF-8-SIG') as configfile:
+            config.write(configfile)
+        
         myfile = open(FileName,'rb')  # 로컬 파일 열기
         ftp.storbinary('STOR ' +FileName, myfile )  # 파일을 FTP로 업로드
         myfile.close()  # 파일 닫기
         ftp.quit()
+        a = 0
         print(f"{now})  FTP 모듈 종료")
 
 @client.event
