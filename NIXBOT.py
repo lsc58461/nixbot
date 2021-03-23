@@ -7,6 +7,7 @@ import re
 import configparser
 import requests_async as requests
 
+from urllib import request
 from discord.ext import commands, tasks
 from itertools import cycle
 from bs4 import BeautifulSoup
@@ -23,8 +24,12 @@ Token = os.environ["Token"]
 config.read('Data.ini', encoding='UTF-8-SIG') 
 config.sections()
 title2 = config['Data']['title']
+FileName = Data_File
+ftp = FTP(os.environ["Server_Address"])
+ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
+ftp.cwd('html/DATA')
 
-a = 0
+a = 1
 
 @tasks.loop(seconds=3)
 async def change_status():
@@ -115,14 +120,26 @@ async def Title_Detected():
     for a in soup.find('h2'):
         PatchNote_Title = a.string
     #print(f"{now})")
+    File_Save = Data_File
 
-    config.read('Data.ini', encoding='UTF-8-SIG') 
+    mem = request.urlopen(Data_URL).read()
+    with open(File_Save, mode="wb") as f:
+        f.write(mem)
+        print((f"{now})  FTP Data.ini 다운로드 완료"))
+
+    config.read(Data_File, encoding='UTF-8-SIG') 
     config.sections()
     title2 = config['Data']['title']
+    
     print(f"{now})  패치노트 감지 중:{PatchNote_Title}")
     if title2 != PatchNote_Title:
         a = 0
         print(f"{now})  패치노트 제목 변경감지\n{now})  패치노트 제목:{PatchNote_Title}")
+        myfile = open(FileName,'rb')  # 로컬 파일 열기
+        ftp.storbinary('STOR ' +FileName, myfile )  # 파일을 FTP로 업로드
+        myfile.close()  # 파일 닫기
+        ftp.quit()
+        print(f"{now})  FTP 모듈 종료")
 
 @client.event
 async def on_ready():
