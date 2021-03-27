@@ -149,40 +149,6 @@ async def Title_Detected():
         ftp.quit()
         a = 0
         print(f"{now})  FTP 모듈 종료")
-
-@client.event
-async def on_message(message):
-	if message.author == client.user: #봇이 채팅을 쳤을 때 명령어로 인식되지 않음
-		return
-        
-	if message.content.startswith("!입장"):
-		await message.author.voice.channel.connect()
-        await message.channel.send("보이스채널에 입장합니다.")
-
-	if message.content.startswith("!퇴장"): #음성채널에 봇을 추가 및 음악 재생
-		for vc in client.voice_clients:
-            if vc.guild == message.guild:
-                voice = vc
-        await voice.disconnect()
-        await message.channel.send("보이스채널에서 퇴장합니다.")
-
-    if message.content.startswith("!재생"):
-        for vc in client.voice_clients:
-            if vc.guild == message.guild:
-                voice = vc
-
-        url = message.content.split(" ")[1]
-        option = {
-            'outtmpl' : "file/" + url.split('=')[1] + ".mp3"
-        }
-
-        with youtube_dl.YoutubeDL(option) as ydl:
-            ydl.download(url)
-            info = ydl.extract_info(url, download=False)
-            title = info["title"]
-
-        voice.play(discord.FFmpegPCMAudio("file/" + url.split('=')[1] + ".mp3"))
-        await message.channel.send(title + "을 재생합니다.")
         
 @client.event
 async def on_ready():
