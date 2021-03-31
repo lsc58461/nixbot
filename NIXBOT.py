@@ -82,7 +82,7 @@ async def mains():
         soup = BeautifulSoup(PatchNote_URL2.text, "html.parser")
         PatchNote_Text = soup.find('blockquote', {'class': 'blockquote context'})
         PatchNote_Text = re.sub('<.+?>', '', str(PatchNote_Text), 0).strip()
-        #print(f"PATCHNOTE TEXT:{PatchNote_Text}")
+        print(f"PATCHNOTE TEXT:{PatchNote_Text}")
 
         MyEmbed = discord.Embed(
             title = PatchNote_Title,
