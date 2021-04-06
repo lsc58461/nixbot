@@ -17,7 +17,7 @@ config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = '!')
-status = cycle(['Produced By JeongYun','NIX 3.6'])
+status = cycle(['Produced By JeongYun','NIX 3.7'])
 now = datetime.datetime.now()
 Data_File = 'Data.ini'
 FileName = Data_File
