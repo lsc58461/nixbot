@@ -143,12 +143,19 @@ async def Title_Detected():
         with open(Data_File, 'w', encoding='UTF-8-SIG') as configfile:
             config.write(configfile)
         
+        ftp = FTP('fxserver.dothome.co.kr')
+        ftp.login('fxserver', 'dlswb4fkd!')
+        ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
         myfile = open(FileName,'rb')  # 로컬 파일 열기
+        print(f"{now})  FTP 로컬 파일 열기 완료")
         ftp.storbinary('STOR ' +FileName, myfile )  # 파일을 FTP로 업로드
+        print(f"{now})  FTP 업로드 완료")
         myfile.close()  # 파일 닫기
+        print(f"{now})  FTP 파일 닫기 완료")
         ftp.quit()
-        a = 0
         print(f"{now})  FTP 모듈 종료")
+        a = 0
+        print(f"{now})  a = 0 반환 완료")
         
 @client.event
 async def on_ready():
