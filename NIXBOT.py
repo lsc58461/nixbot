@@ -56,11 +56,11 @@ async def mains():
         print(f"{now})  패치노트 URL:\n{now})  {PatchNote_URL}")
 
         #패치노트 이미지 주소
-        soup = BeautifulSoup(URL, 'html.parser')
-        for a in soup.find('a'):
-            if a.img:
-                PatchNote_Image_URL = a.img['src']
-                print(f"{now})  이미지 URL:\n{now})  {PatchNote_Image_URL}")
+        PatchNote_URLs = await requests.get(PatchNote_URL)
+        soup = BeautifulSoup(PatchNote_URLs.text, 'html.parser')
+        PatchNote_Image_Find = soup.find('a', {'class':'skins cboxElement'})
+        PatchNote_Image_URL = PatchNote_Image_Find.get('href')
+        print(f"{now})  패치노트 이미지 URL:\n{now})  {PatchNote_Image_URL}")
 
         #패치노트 제목
         soup = BeautifulSoup(URL, "html.parser")
@@ -90,7 +90,7 @@ async def mains():
             color = 0x38f2ff
         )
         MyEmbed.set_thumbnail(
-            url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
+            url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
         )
         MyEmbed.add_field(
             name = "────────────────────────",
