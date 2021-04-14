@@ -42,7 +42,7 @@ async def change_status():
 async def mains():
     global a
     now = datetime.datetime.now()
-    if a == 0:
+    if a == 1:
         print(f"{now})  전송 시작")
         channel = client.get_channel(Channel_ID)
         print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID}")
