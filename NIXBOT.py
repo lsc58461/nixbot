@@ -17,7 +17,7 @@ config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = '!')
-status = cycle(['Produced By JeongYun','NIX 3.8'])
+status = cycle(['Produced By JeongYun','NIX 4.0'])
 now = datetime.datetime.now()
 Data_File = 'Data.ini'
 FileName = Data_File
@@ -93,8 +93,8 @@ async def mains():
             url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
         )
         MyEmbed.add_field(
-            name = "────────────────────────",
-            value = PatchNote_Text[0:266] + "     · · · · ·\n────────────────────────",
+            name = "\n\u200b",
+            value =  "```" + PatchNote_Text[0:266] + "· · ·" + "```",
             inline = True
         )
         MyEmbed.set_author(
