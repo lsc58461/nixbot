@@ -38,7 +38,7 @@ a = 1
 async def change_status():
     await client.change_presence(status = discord.Status.online, activity = discord.Game(next(status)))
 
-@tasks.loop(seconds=3)
+@tasks.loop(seconds=2)
 async def mains():
     global a
     now = datetime.datetime.now()
