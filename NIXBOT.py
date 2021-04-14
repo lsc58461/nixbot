@@ -94,7 +94,7 @@ async def mains():
         )
         MyEmbed.add_field(
             name = "\n\u200b",
-            value =  "```" + PatchNote_Text[0:266] + "· · ·" + "```",
+            value =  "`" + PatchNote_Text[0:266] + "· · ·" + "`",
             inline = True
         )
         MyEmbed.set_author(
