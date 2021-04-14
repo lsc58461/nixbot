@@ -32,7 +32,7 @@ ftp = FTP('fxserver.dothome.co.kr')
 ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
 ftp.cwd('html/DATA')
 
-a = 1
+a = 0
 
 @tasks.loop(seconds=3)
 async def change_status():
@@ -42,7 +42,7 @@ async def change_status():
 async def mains():
     global a
     now = datetime.datetime.now()
-    if a == 0:
+    if a == 1:
         print(f"{now})  전송 시작")
         channel = client.get_channel(Channel_ID)
         print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID}")
@@ -112,7 +112,7 @@ async def mains():
         await channel.send(embed=MyEmbed)
         print(f"{now})  패치노트 전송 성공")
         print(f"{now})  a == {a}")
-        a = 1
+        a = 0
 
 @tasks.loop(seconds=10)
 async def Title_Detected():
@@ -154,8 +154,8 @@ async def Title_Detected():
         print(f"{now})  FTP 파일 닫기 완료")
         ftp.quit()
         print(f"{now})  FTP 모듈 종료")
-        a = 0
-        print(f"{now})  a = 0 반환 완료")
+        a = 1
+        print(f"{now})  a = 1 반환 완료")
         
 @client.event
 async def on_ready():
