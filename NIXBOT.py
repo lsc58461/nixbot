@@ -173,7 +173,7 @@ async def Post_Issues():
         b = 1
         print(f"{now})  Post_Issues 에러 발생\n{now})  {ex}")
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=20)
 async def Title_Detected():
     try:
         URL = await requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
@@ -219,7 +219,7 @@ async def Title_Detected():
     except Exception as ex:
         print(f"{now})  Title_Detected 에러 발생\n{now})  {ex}")
         
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=20)
 async def Issues_Detected():
     try:
         global b
