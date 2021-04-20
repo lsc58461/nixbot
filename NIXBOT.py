@@ -231,7 +231,6 @@ async def Issues_Detected():
                 for translations in updates['translations']:
                     Issues1 = translations['content']
                     Issues = translations['content']
-                    print(Issues1, Issues)
                 
         File_Save_Issues = Data_Issues_File
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
