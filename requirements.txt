@@ -4,3 +4,4 @@ urllib3==1.26.3
 beautifulsoup4==4.9.3
 configparser==5.0.2
 requests_async
+json
