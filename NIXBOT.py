@@ -2,15 +2,12 @@
 
 import os
 import json
-import time
 import discord
 import datetime
 import re
 import configparser
 import requests_async as requests
-import pandas as pd
 
-from selenium import webdriver
 from ftplib import FTP
 from urllib import request
 from discord.ext import commands, tasks
