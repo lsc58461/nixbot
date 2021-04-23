@@ -59,8 +59,8 @@ async def change_status():
 @tasks.loop(seconds=2)
 async def Post_PatchNote():
     try:
+        global a
         if a == 1:
-            global a
             now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_PatchNote)
@@ -135,8 +135,8 @@ async def Post_PatchNote():
 @tasks.loop(seconds=2)
 async def Post_Issues():
     try:
-        if b == 1:
-            global b
+        global b
+        if b == 1:        
             now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
@@ -177,8 +177,8 @@ async def Post_Issues():
 @tasks.loop(seconds=2)
 async def Post_Issues_Empty():
     try:
+        global c
         if c == 1:
-            global c
             now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
@@ -219,9 +219,9 @@ async def Post_Issues_Empty():
 @tasks.loop(seconds=20)
 async def Title_Detected():
     try:
+        global a
         URL = await requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
         now = datetime.datetime.now()
-        global a
         soup = BeautifulSoup(URL.text, "html.parser")
         for a in soup.find('h2'):
             PatchNote_Title = a.string
@@ -270,10 +270,10 @@ async def Issues_Detected():
         File_Save_Issues = Data_Issues_File
         now = datetime.datetime.now()
         Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+        print(Read_json)
         #FileName_json = "Issues.json"
         #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
-        
         with open(File_Save_Issues, mode="wb") as f:
             f.write(mem)
             print((f"{now})  FTP Data_Issues.ini 다운로드 완료"))
