@@ -6,6 +6,7 @@ import discord
 import datetime
 import re
 import configparser
+import requests as requestss
 import requests_async as requests
 
 from ftplib import FTP
@@ -14,11 +15,12 @@ from discord.ext import commands, tasks
 from itertools import cycle
 from bs4 import BeautifulSoup
 
+locale = ""
 config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = '!')
-status = cycle(['Produced By JeongYun','NIX 5.0'])
+status = cycle(['Produced By JeongYun','NIX 5.1'])
 now = datetime.datetime.now()
 Data_PatchNote_File = 'Data.ini'
 Data_Issues_File = 'Data_Issues.ini'
@@ -46,8 +48,9 @@ ftp = FTP('fxserver.dothome.co.kr')
 ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
 ftp.cwd('html/DATA')
 
-a = 0
-b = 0
+a = 0 #Post_PatchNote
+b = 0 #Post_Issues
+c = 0 #Post_Issues_Empty
 
 @tasks.loop(seconds=3)
 async def change_status():
@@ -69,14 +72,14 @@ async def Post_PatchNote():
             soup = BeautifulSoup(URL, 'html.parser')
             PatchNote_URL_find = soup.find('a', {'class': 'style__Wrapper-i44rc3-0 style__ResponsiveWrapper-i44rc3-13 gkCnQM isVisible'})
             PatchNote_URL = "https://kr.leagueoflegends.com" + PatchNote_URL_find.get('href')
-            print(f"{now})  패치노트 주소:\n{now})  {PatchNote_URL}")
+            print(f"{now})  패치노트 주소\n{now})    -{PatchNote_URL}")
 
             #패치노트 이미지 주소
             PatchNote_URLs = await requests.get(PatchNote_URL)
             soup = BeautifulSoup(PatchNote_URLs.text, 'html.parser')
             PatchNote_Image_Find = soup.find('a', {'class':'skins cboxElement'})
             PatchNote_Image_URL = PatchNote_Image_Find.get('href')
-            print(f"{now})  패치노트 이미지 주소:\n{now})  {PatchNote_Image_URL}")
+            print(f"{now})  패치노트 이미지 주소:\n{now})    -{PatchNote_Image_URL}")
 
             #패치노트 제목
             soup = BeautifulSoup(URL, "html.parser")
@@ -127,7 +130,7 @@ async def Post_PatchNote():
             print(f"{now})  a == {a}")
     except Exception as ex:
         a = 1
-        print(f"{now})  Post_PatchNote 에러 발생\n{now})  {ex}")
+        print(f"{now})  Post_PatchNote 에러 발생\n{now})    -{ex}")
 
 @tasks.loop(seconds=2)
 async def Post_Issues():
@@ -138,19 +141,17 @@ async def Post_Issues():
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
-            Issues_URL = request.urlopen("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").read()
-            result = json.loads(Issues_URL)
-            for titles in result['maintenances']:
+            Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+            for titles in Read_json['maintenances']:
                 title = titles['titles'][1]['content']
-            for maintenances in result['maintenances']:
+            for maintenances in Read_json['maintenances']:
                 for updates in maintenances['updates']:
-                    for translations in updates['translations']:
-                        Issues1 = translations['content']
-                        Issues = translations['content']
+                    for issues in updates['translations'][1]['content'].split('\n'):
+                        Issues = issues
         
             MyEmbed = discord.Embed(
                 title = "리그 오브 레전드 서버 상태",
-                url = "https://status.riotgames.com/?locale=ko_KR",
+                url = "https://status.riotgames.com/lol?region=kr1&locale=ko_KR",
                 color = 0x38f2ff
             )
             MyEmbed.set_thumbnail(
@@ -171,7 +172,49 @@ async def Post_Issues():
             print(f"{now})  a == {a}")
     except Exception as ex:
         b = 1
-        print(f"{now})  Post_Issues 에러 발생\n{now})  {ex}")
+        print(f"{now})  Post_Issues 에러 발생\n{now})    -{ex}")
+
+@tasks.loop(seconds=2)
+async def Post_Issues_Empty():
+    try:
+        global c
+        now = datetime.datetime.now()
+        if c == 1:
+            print(f"{now})  전송 시작")
+            channel = client.get_channel(Channel_ID_Issues)
+            print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
+            Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+            for titles in Read_json['maintenances']:
+                title = titles['titles'][1]['content']
+            for maintenances in Read_json['maintenances']:
+                for updates in maintenances['updates']:
+                    for issues in updates['translations'][1]['content'].split('\n'):
+                        Issues = issues
+        
+            MyEmbed = discord.Embed(
+                title = "리그 오브 레전드 서버 상태",
+                url = "https://status.riotgames.com/lol?region=kr1&locale=ko_KR",
+                color = 0x38f2ff
+            )
+            MyEmbed.set_thumbnail(
+                url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
+            )
+            MyEmbed.add_field(
+                name = title,
+                value =  "특이 사항 또는 문제 없음",
+                inline = True
+            )
+            MyEmbed.set_author(
+                name = "League of Legends",
+                icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
+            )
+            await channel.send(embed=MyEmbed)
+            print(f"{now})  이슈 전송 성공")
+            c = 0
+            print(f"{now})  a == {a}")
+    except Exception as ex:
+        c = 1
+        print(f"{now})  Post_Issues 에러 발생\n{now})    -{ex}")
 
 @tasks.loop(seconds=20)
 async def Title_Detected():
@@ -217,24 +260,20 @@ async def Title_Detected():
             a = 1
             print(f"{now})  a = {a} 반환 완료")
     except Exception as ex:
-        print(f"{now})  Title_Detected 에러 발생\n{now})  {ex}")
+        print(f"{now})  Title_Detected 에러 발생\n{now})    -{ex}")
         
 @tasks.loop(seconds=20)
 async def Issues_Detected():
     try:
         global b
-        now = datetime.datetime.now()
-        Issues_URL = request.urlopen("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").read()
-        result = json.loads(Issues_URL)
-        for maintenances in result['maintenances']:
-            for updates in maintenances['updates']:
-                for translations in updates['translations']:
-                    Issues1 = translations['content']
-                    Issues = translations['content']
-                
+        global c
         File_Save_Issues = Data_Issues_File
+        now = datetime.datetime.now()
+        Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+        print(Read_json)
+        #FileName_json = "Issues.json"
+        #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
-
         with open(File_Save_Issues, mode="wb") as f:
             f.write(mem)
             print((f"{now})  FTP Data_Issues.ini 다운로드 완료"))
@@ -243,12 +282,24 @@ async def Issues_Detected():
         config.sections()
         Issues2 = config['Data']['Issues']
 
-        print(f"{now})  이슈 감지 중:{Issues}")
-        if Issues2 != Issues:
+        if Read_json['maintenances'] == "":
+            issues = "Empty"
+            print("특이 사항 또는 문제 없음")
+
+        for maintenances in Read_json['maintenances']:
+            for locale in maintenances['titles'][1]['locale'].split('\n'):
+                print(locale)
+            if locale == "ko_KR":
+                for maintenances in Read_json['maintenances']:
+                    for updates in maintenances['updates']:
+                        for issues in updates['translations'][1]['content'].split('\n'):
+                            print(f"{now})  이슈 감지:{issues}")
+
+        if Issues2 != issues:
             print(f"{now})  이슈 변경감지\n{now})  이슈:{Issues2}")
         
             config['Data'] = {}
-            config['Data']['Issues'] = Issues
+            config['Data']['Issues'] = issues
             with open(Data_Issues_File, 'w', encoding='UTF-8-SIG') as configfile:
                 config.write(configfile)
             
@@ -265,9 +316,13 @@ async def Issues_Detected():
             print(f"{now})  FTP 모듈 종료")
             b = 1
             print(f"{now})  b = {b} 반환 완료")
+        if issues == "Empty":
+            c = 1
+    except UnboundLocalError: # 에러 종류
+        print(f"{now})  UnboundLocalError\n{now})    -특이 사항 또는 문제 없음")
     except Exception as ex: # 에러 종류
-        print(f"{now})  Issues_Detected 에러 발생\n{now})  {ex}")
-        
+        print(f"{now})  Issues_Detected 에러 발생\n{now})    -{ex}")
+      
 @client.event
 async def on_ready():
     print(f"{now})---------------    CONNECTED    ---------------")
@@ -278,7 +333,8 @@ async def on_ready():
     change_status.start()
     Post_PatchNote.start()
     Post_Issues.start()
+    Post_Issues_Empty.start()
     Title_Detected.start()
     Issues_Detected.start()
-    
+
 client.run(Token)
