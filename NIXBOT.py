@@ -270,10 +270,10 @@ async def Issues_Detected():
         File_Save_Issues = Data_Issues_File
         now = datetime.datetime.now()
         Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
-        print(Read_json)
         #FileName_json = "Issues.json"
         #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
+        
         with open(File_Save_Issues, mode="wb") as f:
             f.write(mem)
             print((f"{now})  FTP Data_Issues.ini 다운로드 완료"))
