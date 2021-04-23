@@ -200,7 +200,7 @@ async def Post_Issues_Empty():
                 url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
             )
             MyEmbed.add_field(
-                name = title,
+                name = "\n\u200b",
                 value =  "특이 사항 또는 문제 없음",
                 inline = True
             )
@@ -288,12 +288,11 @@ async def Issues_Detected():
 
         for maintenances in Read_json['maintenances']:
             for locale in maintenances['titles'][1]['locale'].split('\n'):
-                print(locale)
-            if locale == "ko_KR":
-                for maintenances in Read_json['maintenances']:
-                    for updates in maintenances['updates']:
-                        for issues in updates['translations'][1]['content'].split('\n'):
-                            print(f"{now})  이슈 감지:{issues}")
+                if locale == "ko_KR":
+                    for maintenances in Read_json['maintenances']:
+                        for updates in maintenances['updates']:
+                            for issues in updates['translations'][1]['content'].split('\n'):
+                                print(f"{now})  이슈 감지:{issues}")
 
         if Issues2 != issues:
             print(f"{now})  이슈 변경감지\n{now})  이슈:{Issues2}")
