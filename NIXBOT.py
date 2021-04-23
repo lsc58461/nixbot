@@ -284,7 +284,6 @@ async def Issues_Detected():
 
         if Read_json['maintenances'] == "":
             issues = "Empty"
-            print("특이 사항 또는 문제 없음")
 
         for maintenances in Read_json['maintenances']:
             for locale in maintenances['titles'][1]['locale'].split('\n'):
@@ -316,6 +315,7 @@ async def Issues_Detected():
             b = 1
             print(f"{now})  b = {b} 반환 완료")
         if issues == "Empty":
+            print(f"{now})  이슈 변경감지\n{now})  이슈:특이 사항 또는 문제 없음")
             c = 1
     except UnboundLocalError: # 에러 종류
         print(f"{now})  UnboundLocalError\n{now})    -특이 사항 또는 문제 없음")
