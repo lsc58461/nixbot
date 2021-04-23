@@ -59,9 +59,9 @@ async def change_status():
 @tasks.loop(seconds=2)
 async def Post_PatchNote():
     try:
-        global a
-        now = datetime.datetime.now()
         if a == 1:
+            global a
+            now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_PatchNote)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_PatchNote}")
@@ -135,9 +135,9 @@ async def Post_PatchNote():
 @tasks.loop(seconds=2)
 async def Post_Issues():
     try:
-        global b
-        now = datetime.datetime.now()
         if b == 1:
+            global b
+            now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
@@ -177,9 +177,9 @@ async def Post_Issues():
 @tasks.loop(seconds=2)
 async def Post_Issues_Empty():
     try:
-        global c
-        now = datetime.datetime.now()
         if c == 1:
+            global c
+            now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
