@@ -24,6 +24,7 @@ status = cycle(['Produced By JeongYun','NIX 5.1'])
 now = datetime.datetime.now()
 Data_PatchNote_File = 'Data.ini'
 Data_Issues_File = 'Data_Issues.ini'
+Data_Issues_Empty_File = "Data_Issues_Empty.ini"
 Issues_JSON_File = 'Issues.json'
 FileName_PatchNote = Data_PatchNote_File
 FileName_Issues = Data_Issues_File
@@ -51,6 +52,7 @@ ftp.cwd('html/DATA')
 a = 0 #Post_PatchNote
 b = 0 #Post_Issues
 c = 0 #Post_Issues_Empty
+cc = ""
 
 @tasks.loop(seconds=3)
 async def change_status():
@@ -142,8 +144,11 @@ async def Post_Issues():
             channel = client.get_channel(Channel_ID_Issues)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
             Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+            #FileName_json = "Issues.json"
+            #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
             for titles in Read_json['maintenances']:
-                title = titles['titles'][1]['content']
+                for title in titles['titles'][1]['content'].split('\n'):
+                    print(title)
             for maintenances in Read_json['maintenances']:
                 for updates in maintenances['updates']:
                     for issues in updates['translations'][1]['content'].split('\n'):
@@ -169,7 +174,7 @@ async def Post_Issues():
             await channel.send(embed=MyEmbed)
             print(f"{now})  이슈 전송 성공")
             b = 0
-            print(f"{now})  a == {a}")
+            print(f"{now})  a == {b}")
     except Exception as ex:
         b = 1
         print(f"{now})  Post_Issues 에러 발생\n{now})    -{ex}")
@@ -178,43 +183,58 @@ async def Post_Issues():
 async def Post_Issues_Empty():
     try:
         global c
+        global cc
         if c == 1:
             now = datetime.datetime.now()
-            print(f"{now})  전송 시작")
-            channel = client.get_channel(Channel_ID_Issues)
-            print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
-            Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
-            for titles in Read_json['maintenances']:
-                title = titles['titles'][1]['content']
-            for maintenances in Read_json['maintenances']:
-                for updates in maintenances['updates']:
-                    for issues in updates['translations'][1]['content'].split('\n'):
-                        Issues = issues
+            mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues_Empty.ini").read()
+            with open(Data_Issues_Empty_File, mode="wb") as f:
+                f.write(mem)
+                
+            config.read(Data_Issues_Empty_File, encoding='UTF-8-SIG') 
+            config.sections()
+            cc = int(config['Data']['Issues'])
+            
+            if cc == 0:
+                print(f"{now})  전송 시작")
+                channel = client.get_channel(Channel_ID_Issues)
+                print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
         
-            MyEmbed = discord.Embed(
-                title = "리그 오브 레전드 서버 상태",
-                url = "https://status.riotgames.com/lol?region=kr1&locale=ko_KR",
-                color = 0x38f2ff
-            )
-            MyEmbed.set_thumbnail(
-                url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
-            )
-            MyEmbed.add_field(
-                name = "\n\u200b",
-                value =  "특이 사항 또는 문제 없음",
-                inline = True
-            )
-            MyEmbed.set_author(
-                name = "League of Legends",
-                icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
-            )
-            await channel.send(embed=MyEmbed)
-            print(f"{now})  이슈 전송 성공")
-            c = 0
-            print(f"{now})  a == {a}")
+                MyEmbed = discord.Embed(
+                    title = "리그 오브 레전드 서버 상태",
+                    url = "https://status.riotgames.com/lol?region=kr1&locale=ko_KR",
+                    color = 0x38f2ff
+                )
+                MyEmbed.set_thumbnail(
+                    url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
+                )
+                MyEmbed.add_field(
+                    name = "\n\u200b",
+                    value =  "특이 사항 또는 문제 없음",
+                    inline = True
+                )
+                MyEmbed.set_author(
+                    name = "League of Legends",
+                    icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
+                )
+                await channel.send(embed=MyEmbed)
+                print(f"{now})  이슈 전송 성공")
+                c = 0
+                config['Data'] = {}
+                config['Data']['Issues'] = '1'
+                with open(Data_Issues_Empty_File, 'w', encoding='UTF-8-SIG') as configfile:
+                    config.write(configfile)
+                ftp = FTP('fxserver.dothome.co.kr')
+                ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
+                ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
+                myfile = open(Data_Issues_Empty_File,'rb')  # 로컬 파일 열기
+                ftp.storbinary('STOR ' +Data_Issues_Empty_File, myfile )  # 파일을 FTP로 업로드
+                print(f"{now})  FTP {Data_Issues_Empty_File} 업로드 완료")
+                myfile.close()  # 파일 닫기
+                ftp.quit()
+                print(f"{now})  cc = 1 반환 완료")
     except Exception as ex:
         c = 1
-        print(f"{now})  Post_Issues 에러 발생\n{now})    -{ex}")
+        print(f"{now})  Post_Issues_Empty 에러 발생\n{now})    -{ex}")
 
 @tasks.loop(seconds=20)
 async def Title_Detected():
@@ -269,9 +289,11 @@ async def Issues_Detected():
         global c
         File_Save_Issues = Data_Issues_File
         now = datetime.datetime.now()
-        Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
-        #FileName_json = "Issues.json"
-        #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
+        #Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
+        #print(Read_json)
+        FileName_json = "empty.json"
+        Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
+
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
         with open(File_Save_Issues, mode="wb") as f:
             f.write(mem)
@@ -281,7 +303,7 @@ async def Issues_Detected():
         config.sections()
         Issues2 = config['Data']['Issues']
 
-        if Read_json['maintenances'] == "":
+        if Read_json['maintenances'] == []:
             issues = "Empty"
 
         for maintenances in Read_json['maintenances']:
@@ -304,18 +326,45 @@ async def Issues_Detected():
             ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
             ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
             myfile = open(FileName_Issues,'rb')  # 로컬 파일 열기
-            print(f"{now})  FTP 로컬 파일 열기 완료")
             ftp.storbinary('STOR ' +FileName_Issues, myfile )  # 파일을 FTP로 업로드
             print(f"{now})  FTP 업로드 완료")
             myfile.close()  # 파일 닫기
-            print(f"{now})  FTP 파일 닫기 완료")
             ftp.quit()
-            print(f"{now})  FTP 모듈 종료")
             b = 1
             print(f"{now})  b = {b} 반환 완료")
-        if issues == "Empty":
+            config['Data'] = {}
+            config['Data']['Issues'] = 0
+            with open(Data_Issues_Empty_File, 'w', encoding='UTF-8-SIG') as configfile:
+                config.write(configfile)
+            ftp = FTP('fxserver.dothome.co.kr')
+            ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
+            ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
+            myfile = open(Data_Issues_Empty_File,'rb')  # 로컬 파일 열기
+            ftp.storbinary('STOR ' +Data_Issues_Empty_File, myfile )  # 파일을 FTP로 업로드
+            print(f"{now})  FTP {Data_Issues_Empty_File} 업로드 완료")
+            myfile.close()  # 파일 닫기
+            ftp.quit()
+            print(f"{now})  cc = 0 반환 완료")
+        elif issues == "Empty":
             print(f"{now})  이슈 변경감지\n{now})  이슈:특이 사항 또는 문제 없음")
+            
+            config['Data'] = {}
+            config['Data']['Issues'] = issues
+            with open(Data_Issues_File, 'w', encoding='UTF-8-SIG') as configfile:
+                config.write(configfile)
+            
+            ftp = FTP('fxserver.dothome.co.kr')
+            ftp.login(os.environ["Server_ID"], os.environ["Server_PW"])
+            ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
+            myfile = open(FileName_Issues,'rb')  # 로컬 파일 열기
+            ftp.storbinary('STOR ' +FileName_Issues, myfile )  # 파일을 FTP로 업로드
+            print(f"{now})  FTP 업로드 완료")
+            myfile.close()  # 파일 닫기
+            ftp.quit()
             c = 1
+            print(f"{now})  c = {c} 반환 완료")
+            
+
     except UnboundLocalError: # 에러 종류
         print(f"{now})  UnboundLocalError\n{now})    -특이 사항 또는 문제 없음")
     except Exception as ex: # 에러 종류
