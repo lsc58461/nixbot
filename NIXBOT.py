@@ -252,7 +252,6 @@ async def Title_Detected():
 
         with open(File_Save, mode="wb") as f:
             f.write(mem)
-            print((f"{now})  FTP Data.ini 다운로드 완료"))
 
         config.read(Data_PatchNote_File, encoding='UTF-8-SIG') 
         config.sections()
@@ -298,7 +297,6 @@ async def Issues_Detected():
         mem = request.urlopen("http://fxserver.dothome.co.kr/DATA/Data_Issues.ini").read()
         with open(File_Save_Issues, mode="wb") as f:
             f.write(mem)
-            print((f"{now})  FTP Data_Issues.ini 다운로드 완료"))
 
         config.read(Data_Issues_File, encoding='UTF-8-SIG') 
         config.sections()
