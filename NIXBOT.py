@@ -157,7 +157,7 @@ async def Post_Issues():
             MyEmbed = discord.Embed(
                 title = "리그 오브 레전드 서버 상태",
                 url = "https://status.riotgames.com/lol?region=kr1&locale=ko_KR",
-                color = 0x38f2ff
+                color = 0xFF5A5A
             )
             MyEmbed.set_thumbnail(
                 url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
