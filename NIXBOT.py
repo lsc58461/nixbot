@@ -195,6 +195,7 @@ async def Post_Issues_Empty():
             cc = int(config['Data']['Issues'])
             
             if cc == 0:
+                print(f"{now})  이슈 변경감지\n{now})  이슈:특이 사항 또는 문제 없음")
                 print(f"{now})  전송 시작")
                 channel = client.get_channel(Channel_ID_Issues)
                 print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
@@ -305,14 +306,16 @@ async def Issues_Detected():
 
         if Read_json['maintenances'] == []:
             issues = "Empty"
-
+            
+            print(f"{now})  이슈 감지 중:특이 사항 또는 문제 없음")
+            
         for maintenances in Read_json['maintenances']:
             for locale in maintenances['titles'][1]['locale'].split('\n'):
                 if locale == "ko_KR":
                     for maintenances in Read_json['maintenances']:
                         for updates in maintenances['updates']:
                             for issues in updates['translations'][1]['content'].split('\n'):
-                                print(f"{now})  이슈 감지:{issues}")
+                                print(f"{now})  이슈 감지 중:{issues}")
 
         if Issues2 != issues:
             print(f"{now})  이슈 변경감지\n{now})  이슈:{Issues2}")
@@ -346,10 +349,9 @@ async def Issues_Detected():
             ftp.quit()
             print(f"{now})  cc = 0 반환 완료")
         elif issues == "Empty":
-            print(f"{now})  이슈 변경감지\n{now})  이슈:특이 사항 또는 문제 없음")
-            
             config['Data'] = {}
             config['Data']['Issues'] = issues
+            
             with open(Data_Issues_File, 'w', encoding='UTF-8-SIG') as configfile:
                 config.write(configfile)
             
@@ -358,11 +360,9 @@ async def Issues_Detected():
             ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
             myfile = open(FileName_Issues,'rb')  # 로컬 파일 열기
             ftp.storbinary('STOR ' +FileName_Issues, myfile )  # 파일을 FTP로 업로드
-            print(f"{now})  FTP 업로드 완료")
             myfile.close()  # 파일 닫기
             ftp.quit()
             c = 1
-            print(f"{now})  c = {c} 반환 완료")
             
 
     except UnboundLocalError: # 에러 종류
