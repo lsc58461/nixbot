@@ -32,7 +32,9 @@ Data_URL = os.environ["Data_URL"]
 
 #채널 ID
 Channel_ID_PatchNote = int(os.environ["Channel_ID_PatchNote"])
+Channel_ID_PatchNote2 = int(os.environ["Channel_ID_PatchNote2"])
 Channel_ID_Issues = int(os.environ["Channel_ID_Issues"])
+Channel_ID_Issues2 = int(os.environ["Channel_ID_Issues2"])
 
 #토큰
 Token = os.environ["Token"]
@@ -66,7 +68,9 @@ async def Post_PatchNote():
             now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_PatchNote)
+            channel2 = client.get_channel(Channel_ID_PatchNote2)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_PatchNote}")
+            print(f"{now})  채널 이름:{channel2}\n{now})  채널 ID:{Channel_ID_PatchNote2}")
             URL = await requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
             URL = URL.text
 
@@ -127,6 +131,7 @@ async def Post_PatchNote():
             )
 
             await channel.send(embed=MyEmbed)
+            await channel2.send(embed=MyEmbed)
             print(f"{now})  패치노트 전송 성공")
             a = 0
             print(f"{now})  a == {a}")
@@ -142,7 +147,9 @@ async def Post_Issues():
             now = datetime.datetime.now()
             print(f"{now})  전송 시작")
             channel = client.get_channel(Channel_ID_Issues)
+            channel2 = client.get_channel(Channel_ID_Issues2)
             print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
+            print(f"{now})  채널 이름:{channel2}\n{now})  채널 ID:{Channel_ID_Issues2}")
             Read_json = requestss.get("https://lol.secure.dyn.riotcdn.net/channels/public/x/status/kr1.json").json()
             #FileName_json = "Issues.json"
             #Read_json = json.loads(open(FileName_json, encoding='UTF-8-SIG').read())
@@ -172,6 +179,7 @@ async def Post_Issues():
                 icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
             )
             await channel.send(embed=MyEmbed)
+            await channel2.send(embed=MyEmbed)
             print(f"{now})  이슈 전송 성공")
             b = 0
             print(f"{now})  a == {b}")
@@ -198,7 +206,9 @@ async def Post_Issues_Empty():
                 print(f"{now})  이슈 변경감지\n{now})  이슈:특이 사항 또는 문제 없음")
                 print(f"{now})  전송 시작")
                 channel = client.get_channel(Channel_ID_Issues)
+                channel2 = client.get_channel(Channel_ID_Issues2)
                 print(f"{now})  채널 이름:{channel}\n{now})  채널 ID:{Channel_ID_Issues}")
+                print(f"{now})  채널 이름:{channel2}\n{now})  채널 ID:{Channel_ID_Issues2}")
         
                 MyEmbed = discord.Embed(
                     title = "리그 오브 레전드 서버 상태",
@@ -217,7 +227,9 @@ async def Post_Issues_Empty():
                     name = "League of Legends",
                     icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
                 )
+                
                 await channel.send(embed=MyEmbed)
+                await channel2.send(embed=MyEmbed)
                 print(f"{now})  이슈 전송 성공")
                 c = 0
                 config['Data'] = {}
