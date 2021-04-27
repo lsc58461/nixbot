@@ -198,6 +198,8 @@ async def Post_Issues_Empty():
             with open(Data_Issues_Empty_File, mode="wb") as f:
                 f.write(mem)
 
+            
+
             config.read(Data_Issues_Empty_File, encoding='UTF-8-SIG') 
             config.sections()
             cc = int(config['Data']['Issues'])
@@ -344,8 +346,10 @@ async def Issues_Detected():
             ftp.quit()
             b = 1
             print(f"{now})  b = {b} 반환 완료")
+            
+        elif issues == "Empty":
             config['Data'] = {}
-            config['Data']['Issues'] = 0
+            config['Data']['Issues'] = "0"
             with open(Data_Issues_Empty_File, 'w', encoding='UTF-8-SIG') as configfile:
                 config.write(configfile)
             ftp = FTP('fxserver.dothome.co.kr')
@@ -357,10 +361,9 @@ async def Issues_Detected():
             myfile.close()  # 파일 닫기
             ftp.quit()
             print(f"{now})  cc = 0 반환 완료")
-        elif issues == "Empty":
+
             config['Data'] = {}
             config['Data']['Issues'] = issues
-            
             with open(Data_Issues_File, 'w', encoding='UTF-8-SIG') as configfile:
                 config.write(configfile)
             
@@ -376,7 +379,8 @@ async def Issues_Detected():
 
     except UnboundLocalError: # 에러 종류
         print(f"{now})  UnboundLocalError\n{now})    -특이 사항 또는 문제 없음")
-    
+    except Exception as ex: # 에러 종류
+        print(f"{now})  Issues_Detected 에러 발생\n{now})    -{ex}")
       
 @client.event
 async def on_ready():
