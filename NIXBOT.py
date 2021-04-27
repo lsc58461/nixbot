@@ -316,7 +316,6 @@ async def Issues_Detected():
 
         if Read_json['maintenances'] == []:
             issues = "Empty"
-            
             print(f"{now})  이슈 감지 중:특이 사항 또는 문제 없음")
             
         for maintenances in Read_json['maintenances']:
@@ -328,7 +327,7 @@ async def Issues_Detected():
                                 print(f"{now})  이슈 감지 중:{issues}")
 
         if Issues2 != issues:
-            print(f"{now})  이슈 변경감지\n{now})  이슈:{Issues2}")
+            print(f"{now})  이슈 변경감지\n{now})  이슈:{issues}")
         
             config['Data'] = {}
             config['Data']['Issues'] = issues
