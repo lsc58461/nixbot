@@ -376,8 +376,7 @@ async def Issues_Detected():
 
     except UnboundLocalError: # 에러 종류
         print(f"{now})  UnboundLocalError\n{now})    -특이 사항 또는 문제 없음")
-    except Exception as ex: # 에러 종류
-        print(f"{now})  Issues_Detected 에러 발생\n{now})    -{ex}")
+    
       
 @client.event
 async def on_ready():
