@@ -139,7 +139,6 @@ async def Post_PatchNote():
         a = 1
         print(f"{now})  Post_PatchNote 에러 발생\n{now})    -{ex}")
 
-@tasks.loop(seconds=2)
 async def Post_Issues():
     try:
         global b
@@ -187,7 +186,6 @@ async def Post_Issues():
         b = 1
         print(f"{now})  Post_Issues 에러 발생\n{now})    -{ex}")
 
-@tasks.loop(seconds=2)
 async def Post_Issues_Empty():
     try:
         global c
@@ -251,7 +249,7 @@ async def Post_Issues_Empty():
         c = 1
         print(f"{now})  Post_Issues_Empty 에러 발생\n{now})    -{ex}")
 
-@tasks.loop(seconds=20)
+@tasks.loop(seconds=10)
 async def Title_Detected():
     try:
         global a
@@ -296,7 +294,6 @@ async def Title_Detected():
     except Exception as ex:
         print(f"{now})  Title_Detected 에러 발생\n{now})    -{ex}")
         
-@tasks.loop(seconds=20)
 async def Issues_Detected():
     try:
         global b
@@ -391,9 +388,6 @@ async def on_ready():
     
     change_status.start()
     Post_PatchNote.start()
-    Post_Issues.start()
-    Post_Issues_Empty.start()
     Title_Detected.start()
-    Issues_Detected.start()
 
 client.run(Token)
