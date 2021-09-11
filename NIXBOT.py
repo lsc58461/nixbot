@@ -20,7 +20,7 @@ config = configparser.ConfigParser()
 config.read('Config.ini', encoding='UTF-8-SIG') 
 config.sections()
 client = commands.Bot(command_prefix = ';')
-status = cycle(['Produced By JeongYun','NIX 5.1'])
+status = cycle(['Produced By JeongYun','LOL PatchNotes'])
 now = datetime.datetime.now()
 Data_PatchNote_File = 'Data.ini'
 Data_Issues_File = 'Data_Issues.ini'
