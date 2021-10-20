@@ -126,7 +126,7 @@ async def Post_PatchNote():
             )
             MyEmbed.set_author(
                 name = "League of Legends",
-                icon_url = "https://cdn.discordapp.com/attachments/811123288352358441/811695474952110110/NIX.png"
+                icon_url = "https://cdn.discordapp.com/attachments/872119542510391336/900320015935496202/15202c5af949bc39.png"
             )     
             MyEmbed.set_image(
                 url = PatchNote_Image_URL
