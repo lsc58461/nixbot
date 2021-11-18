@@ -85,10 +85,10 @@ async def Title_Detected():
       
 @client.event
 async def on_ready():
-    print(f"{now})---------------    CONNECTED    ---------------")
-    print(f"{now})  봇 이름 : {client.user.name}")
-    print(f"{now})  봇 ID : {client.user.id}")
-    print(f"{now})-----------------------------------------------")
+    print(f"{Time()})---------------    CONNECTED    ---------------")
+    print(f"{Time()})  봇 이름 : {client.user.name}")
+    print(f"{Time()})  봇 ID : {client.user.id}")
+    print(f"{Time()})-----------------------------------------------")
     
     change_status.start()
     Post_PatchNote.start()
