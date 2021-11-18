@@ -3,8 +3,9 @@
 import os
 import discord
 import configparser
-from discord.ext import commands, tasks
+from urllib import request
 from itertools import cycle
+from discord.ext import commands, tasks
 from Now_Time import Time
 from Read_Config import Config_Detect, Config_Title
 from FTP_TitleName_Post import FTP_Post
@@ -18,9 +19,6 @@ Data_URL = os.environ["Data_URL"]
 
 #채널 ID
 Channel_ID_PatchNote = int(os.environ["Channel_ID_PatchNote"])
-Channel_ID_PatchNote2 = int(os.environ["Channel_ID_PatchNote2"])
-Channel_ID_Issues = int(os.environ["Channel_ID_Issues"])
-Channel_ID_Issues2 = int(os.environ["Channel_ID_Issues2"])
 
 #토큰
 Token = os.environ["Token"]
@@ -70,6 +68,9 @@ async def Post_PatchNote():
 async def Title_Detected():
     try:
         global Detect
+        Get_Server_Save_Title = request.urlopen(Data_URL).read()
+        with open(Data_PatchNote_File, mode="wb") as f:
+            f.write(Get_Server_Save_Title)
         Title = Config_Title()
         print(f"{Time()})  패치노트 감지 중:{Crawling_Title()}")
         if Title != Crawling_Title():
