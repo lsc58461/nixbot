@@ -6,11 +6,3 @@ def Time():
         return now
     except:
         return "시간을 알 수 없습니다."
-
-
-    
-    
-
-
-    
-
