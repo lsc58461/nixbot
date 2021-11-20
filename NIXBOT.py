@@ -60,10 +60,12 @@ async def Post_PatchNote():
             print(f"{Time()})  패치노트 전송 성공")
             Detect = 0
             print(f"{Time()})  Detect : {Detect}")
+            return
     except Exception as ex:
         Detect = 1
         print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}")
-
+        return
+    
 @tasks.loop(seconds=5)
 async def Title_Detected():
     try:
@@ -73,7 +75,10 @@ async def Title_Detected():
             f.write(Get_Server_Save_Title)
         Title = Config_Title()
         print(f"{Time()})  패치노트 감지 중:{Crawling_Title()}")
-        if Title != Crawling_Title():
+        if Crawling_Title() == None:
+            print(f"{Time()})  Crawling_Title:None")
+            return
+        elif Title != Crawling_Title():
             print(f"{Time()})  패치노트 제목 변경감지\n{Time()})  패치노트 제목:{Crawling_Title()}")
             config['Data'] = {}
             config['Data']['Title'] = Crawling_Title()
@@ -81,8 +86,10 @@ async def Title_Detected():
                 config.write(configfile)
             FTP_Post(Data_PatchNote_File)
             Detect = Config_Detect()
+            return
     except Exception as ex:
         print(f"{Time()})  Title_Detected 에러 발생\n{Time()})    -{ex}")
+        return
       
 @client.event
 async def on_ready():
