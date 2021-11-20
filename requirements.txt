@@ -1,4 +1,4 @@
-discord.py==1.6.0
+discord.py==1.7.3
 DateTime==4.3
 urllib3==1.26.3
 beautifulsoup4==4.9.3
