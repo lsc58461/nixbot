@@ -7,7 +7,7 @@ from urllib import request
 from itertools import cycle
 from discord.ext import commands, tasks
 from Now_Time import Time
-from Read_Config import Config_Detect, Config_Title
+from Read_Config import Config_Title
 from FTP_TitleName_Post import FTP_Post
 from Crawling_PatchNote import Crawling_URL, Crawling_Title, Crawling_Content, Crawling_Image_URL
 
@@ -29,44 +29,35 @@ Detect = 0
 async def change_status():
     await client.change_presence(status = discord.Status.online, activity = discord.Game(next(status)))
 
-@tasks.loop(seconds=2)
+@tasks.loop(count=1)
 async def Post_PatchNote():
     try:
-        global Detect
-        if Detect == 1:
-            channel = client.get_channel(Channel_ID_PatchNote)
-            
-            MyEmbed = discord.Embed(
-                title = Crawling_Title(),
-                url = Crawling_URL(),
-                color = 0x38f2ff
-            )
-            MyEmbed.set_thumbnail(
-                url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
-            )
-            MyEmbed.add_field(
-                name = "\n\u200b",
-                value =  '```css\n{} · · ·\n```'.format(Crawling_Content()[0:266]),
-                inline = True
-            )
-            MyEmbed.set_author(
-                name = "League of Legends",
-                icon_url = "https://cdn.discordapp.com/attachments/872119542510391336/900320015935496202/15202c5af949bc39.png"
-            )     
-            MyEmbed.set_image(
-                url = Crawling_Image_URL()
-            )
-            await channel.send(embed=MyEmbed)
-            print(f"{Time()})  패치노트 전송 성공")
-            Detect = 0
-            print(f"{Time()})  Detect : {Detect}")
-            return
+        channel = client.get_channel(Channel_ID_PatchNote)
+        
+        MyEmbed = discord.Embed(
+            title = Crawling_Title(),
+            url = Crawling_URL(),
+            color = 0x38f2ff
+        ).set_thumbnail(
+            url = "https://cdn.discordapp.com/attachments/811123288352358441/831572153542639666/league_of_legends_sm.png"
+        ).add_field(
+            name = "\n\u200b",
+            value = '```css\n{} · · ·\n```'.format(Crawling_Content()[0:266]),
+            inline = True
+        ).set_author(
+            name = "League of Legends",
+            icon_url = "https://cdn.discordapp.com/attachments/872119542510391336/900320015935496202/15202c5af949bc39.png"
+        ).set_image(
+            url = Crawling_Image_URL()
+        )
+        await channel.send(embed=MyEmbed)
+        print(f"{Time()})  패치노트 전송 성공")
+        return
     except Exception as ex:
-        Detect = 1
         print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}")
         return
     
-@tasks.loop(seconds=5)
+@tasks.loop(seconds=10)
 async def Title_Detected():
     try:
         global Detect
@@ -85,7 +76,7 @@ async def Title_Detected():
             with open(Data_PatchNote_File, 'w', encoding='UTF-8-SIG') as configfile:
                 config.write(configfile)
             FTP_Post(Data_PatchNote_File)
-            Detect = Config_Detect()
+            Post_PatchNote.start()
             return
     except Exception as ex:
         print(f"{Time()})  Title_Detected 에러 발생\n{Time()})    -{ex}")
@@ -99,7 +90,6 @@ async def on_ready():
     print(f"{Time()})-----------------------------------------------")
     
     change_status.start()
-    Post_PatchNote.start()
     Title_Detected.start()
 
 client.run(Token)
