@@ -61,9 +61,11 @@ def Crawling_Content(): #패치노트 내용
         PatchNote_URL.encoding = 'UTF-8-SIG'
         soup = BeautifulSoup(PatchNote_URL.text, "html.parser")
         PatchNote_Text = soup.find('blockquote', {'class': 'blockquote context'})
-        PatchNote_Text = re.sub('<.+?>', '', str(PatchNote_Text), 0).strip()
+        PatchNote_Text = re.sub('<.+?>', ' ', str(PatchNote_Text), 0).strip()
+        PatchNote_Text = re.sub('<.+?>', '\n', str(PatchNote_Text), 0).strip()
+        PatchNote_Text = re.sub('    ', '\n', str(PatchNote_Text), 0).strip()
         print(f"{Time()})  패치노트 내용:{PatchNote_Text}")
         return PatchNote_Text
     except:
         print(f'{Time()})  "Crawling_Content" 에러')
-        pass            
+        pass                   
