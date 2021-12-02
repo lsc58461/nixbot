@@ -23,8 +23,6 @@ Channel_ID_PatchNote = int(os.environ["Channel_ID_PatchNote"])
 #토큰
 Token = os.environ["Token"]
 
-Detect = 0
-
 @tasks.loop(seconds=3)
 async def change_status():
     await client.change_presence(status = discord.Status.online, activity = discord.Game(next(status)))
@@ -60,24 +58,24 @@ async def Post_PatchNote():
 @tasks.loop(seconds=10)
 async def Title_Detected():
     try:
-        global Detect
         Get_Server_Save_Title = request.urlopen(Data_URL).read()
         with open(Data_PatchNote_File, mode="wb") as f:
             f.write(Get_Server_Save_Title)
         Title = Config_Title()
         print(f"{Time()})  패치노트 감지 중:{Crawling_Title()}")
-        if Crawling_Title() == None:
-            print(f"{Time()})  Crawling_Title:None")
-            return
-        elif Title != Crawling_Title():
-            print(f"{Time()})  패치노트 제목 변경감지\n{Time()})  패치노트 제목:{Crawling_Title()}")
-            config['Data'] = {}
-            config['Data']['Title'] = Crawling_Title()
-            with open(Data_PatchNote_File, 'w', encoding='UTF-8-SIG') as configfile:
-                config.write(configfile)
-            FTP_Post(Data_PatchNote_File)
-            Post_PatchNote.start()
-            return
+        if Title != Crawling_Title():
+            if Crawling_Title() == None:
+                print(f"{Time()})  Crawling_Title:None")
+                return
+            else:
+                print(f"{Time()})  패치노트 제목 변경감지\n{Time()})  패치노트 제목:{Crawling_Title()}")
+                config['Data'] = {}
+                config['Data']['Title'] = Crawling_Title()
+                with open(Data_PatchNote_File, 'w', encoding='UTF-8-SIG') as configfile:
+                    config.write(configfile)
+                FTP_Post(Data_PatchNote_File)
+                Post_PatchNote.start()
+                return
     except Exception as ex:
         print(f"{Time()})  Title_Detected 에러 발생\n{Time()})    -{ex}")
         return
