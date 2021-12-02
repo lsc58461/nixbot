@@ -25,9 +25,9 @@ def Crawling_Title(): #패치노트 제목
             f.write(mem)
         
         return PatchNote_Title
-    except:
-        print(f'{Time()})  "Crawling_Title" 에러')
-        pass
+    except Exception as ex:
+        print(f'{Time()})  "Crawling_Title" 에러 발생\n{Time()})    -{ex}')
+        return
 
 def Crawling_URL(): #패치노트 URL
     try:
@@ -38,9 +38,9 @@ def Crawling_URL(): #패치노트 URL
         PatchNote_URL = "https://kr.leagueoflegends.com" + PatchNote_URL_find.get('href')
         print(f"{Time()})  패치노트 URL\n{Time()})    -{PatchNote_URL}")
         return PatchNote_URL
-    except:
-        print(f'{Time()})  "Crawling_URL" 에러')
-        pass
+    except Exception as ex:
+        print(f'{Time()})  "Crawling_URL" 에러 발생\n{Time()})    -{ex}')
+        return
 
 def Crawling_Image_URL(): #패치노트 이미지 URL
     try:
@@ -51,9 +51,9 @@ def Crawling_Image_URL(): #패치노트 이미지 URL
         PatchNote_Image_URL = PatchNote_Image_Find.get('href')
         print(f"{Time()})  패치노트 이미지 URL:\n{Time()})    -{PatchNote_Image_URL}")
         return PatchNote_Image_URL
-    except:
-        print(f'{Time()})  "Crawling_Image" 에러')
-        pass
+    except Exception as ex:
+        print(f'{Time()})  "Crawling_Image_URL" 에러 발생\n{Time()})    -{ex}')
+        return
     
 def Crawling_Content(): #패치노트 내용
     try:      
@@ -66,6 +66,6 @@ def Crawling_Content(): #패치노트 내용
         PatchNote_Text = re.sub('    ', '\n', str(PatchNote_Text), 0).strip()
         print(f"{Time()})  패치노트 내용:{PatchNote_Text}")
         return PatchNote_Text
-    except:
-        print(f'{Time()})  "Crawling_Content" 에러')
-        pass                   
+    except Exception as ex:
+        print(f'{Time()})  "Crawling_Content" 에러 발생\n{Time()})    -{ex}')
+        return                 
