@@ -3,6 +3,7 @@
 import os
 import discord
 import configparser
+
 from urllib import request
 from itertools import cycle
 from discord.ext import commands, tasks
@@ -14,14 +15,17 @@ from Crawling_PatchNote import Crawling_URL, Crawling_Title, Crawling_Content, C
 config = configparser.ConfigParser()
 client = commands.Bot(command_prefix = ';')
 status = cycle(['Produced By JeongYun','LOL PatchNotes'])
+
 Data_PatchNote_File = 'Data.ini'
-Data_URL = os.environ["Data_URL"]
+Data_URL = "http://fxserver.dothome.co.kr/DATA/Data.ini"
 
 #채널 ID
-Channel_ID_PatchNote = int(os.environ["Channel_ID_PatchNote"])
+Channel_ID_PatchNote = int("811169207327653908")
 
 #토큰
 Token = os.environ["Token"]
+
+Contour = "--------------------------------------------------------------------------"
 
 @tasks.loop(seconds=3)
 async def change_status():
@@ -49,10 +53,10 @@ async def Post_PatchNote():
             url = Crawling_Image_URL()
         )
         await channel.send(embed=MyEmbed)
-        print(f"{Time()})  패치노트 전송 성공")
+        print(f"{Time()})  패치노트 전송 성공\n{Contour}")
         return
     except Exception as ex:
-        print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}")
+        print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}\n{Contour}")
         return
     
 @tasks.loop(seconds=10)
