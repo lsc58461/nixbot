@@ -14,22 +14,22 @@ def Crawling_Title(): #패치노트 제목
             URL = requests.get("https://kr.leagueoflegends.com/ko-kr/news/tags/patch-notes")
         except:
             print(f"{Time()})  패치노트 URL을 불러오는데 실패했어요.\n{Contour}")
-            return None
+            return
         URL.encoding = 'UTF-8-SIG'
         soup = BeautifulSoup(URL.text, "html.parser")
         try:
             for a in soup.find('h2'):
                 PatchNote_Title = a.string
                 if PatchNote_Title == None:
-                    print(f'{Time()})  PatchNote_Title:None\n{Contour}')
-                    return None
+                    print(f'{Time()})  PatchNote_Title:None(Crawling_Title)\n{Contour}')
+                    return
         except Exception as ex:
             print(f"{Time()})  PatchNote_Title 에러 발생\n{Time()})    -{ex}\n{Contour}")
-            return None
+            return
         return PatchNote_Title
     except Exception as ex:
         print(f"{Time()})  Crawling_Title 에러 발생\n{Time()})    -{ex}\n{Contour}")
-        return None
+        return
 
 def Crawling_URL(): #패치노트 URL
     try:
