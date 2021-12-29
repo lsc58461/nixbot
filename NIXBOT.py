@@ -67,7 +67,7 @@ async def Title_Detected():
             f.write(Get_Server_Save_Title)
         config.read('Data.ini', encoding='UTF-8-SIG')
         Get_Server_Save_Title = config['Data']['Title']
-        Title = Config_Title()
+        Title = Crawling_Title()
         print(f"{Time()})  패치노트 감지 중:{Title}\n{Time()})  Get_Server_Save_Title:{Get_Server_Save_Title}\n{Contour}")
         if Get_Server_Save_Title != Title:
             if Title == None:
