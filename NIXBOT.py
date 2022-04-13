@@ -59,7 +59,7 @@ async def Post_PatchNote():
         print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}\n{Contour}")
         return
     
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=30)
 async def Title_Detected():
     try:
         Get_Server_Save_Title = request.urlopen(Data_URL).read()
