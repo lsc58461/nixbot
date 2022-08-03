@@ -8,8 +8,8 @@ config = configparser.ConfigParser()
 
 def FTP_Post(FileName_PatchNote):
     try:
-        ftp = FTP('fxserver.dothome.co.kr')
-        ftp.login("fxserver", "dlswb4fkd!")
+        ftp = FTP('nixserver.dothome.co.kr')
+        ftp.login("nixserver", "dlswb4fkd!")
         
         ftp.cwd('html/DATA')  # 업로드할 FTP 폴더로 이동
         myfile = open(FileName_PatchNote,'rb')  # 로컬 파일 열기
