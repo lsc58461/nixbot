@@ -17,7 +17,7 @@ client = commands.Bot(command_prefix = ';')
 status = cycle(['Produced By JeongYun','LOL PatchNotes'])
 
 Data_PatchNote_File = 'Data.ini'
-Data_URL = "http://fxserver.dothome.co.kr/DATA/Data.ini"
+Data_URL = "http://nixserver.dothome.co.kr/DATA/Data.ini"
 
 #채널 ID
 Channel_ID_PatchNote = int("811169207327653908")
