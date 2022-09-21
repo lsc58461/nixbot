@@ -21,6 +21,7 @@ Data_URL = "http://nixserver.dothome.co.kr/DATA/Data.ini"
 
 #채널 ID
 Channel_ID_PatchNote = int("811169207327653908")
+Channel_ID_PatchNote2 = int("1021964998081265804")
 
 #토큰
 Token = os.environ["Token"]
@@ -35,6 +36,7 @@ async def change_status():
 async def Post_PatchNote():
     try:
         channel = client.get_channel(Channel_ID_PatchNote)
+        channel2 = client.get_channel(Channel_ID_PatchNote2)
         
         MyEmbed = discord.Embed(
             title = Crawling_Title(),
@@ -53,6 +55,7 @@ async def Post_PatchNote():
             url = Crawling_Image_URL()
         )
         await channel.send(embed=MyEmbed)
+        await channel2.send(embed=MyEmbed)
         print(f"{Time()})  패치노트 전송 성공\n{Contour}")
         return
     except Exception as ex:
