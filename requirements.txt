@@ -1,6 +1,6 @@
-discord.py==1.7.3
+nextcord==2.2.0
 DateTime==4.3
 urllib3==1.26.3
 beautifulsoup4==4.9.3
 configparser==5.0.2
-requests_async
+requests_async==0.6.2
