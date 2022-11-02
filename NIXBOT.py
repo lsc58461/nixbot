@@ -1,7 +1,7 @@
 #pyinstaller --icon=NIX.ico --onefile NIXBOT.py
 
 import os
-import discord
+import nextcord
 import configparser
 
 from urllib import request
