@@ -39,6 +39,7 @@ async def change_status():
 async def Post_PatchNote():
     try:
         channel = client.get_channel(Channel_ID_PatchNote)
+        channel2 = client.get_channel(Channel_ID_PatchNote2)
         
         MyEmbed = nextcord.Embed(
             title = Config_Title(),
@@ -57,6 +58,7 @@ async def Post_PatchNote():
             url = Crawling_Image_URL()
         )
         await channel.send(embed=MyEmbed)
+        await channel2.send(embed=MyEmbed)
         print(f"{Time()})  Config_Title\n{Config_Title()}")
         print(f"{Time()})  패치노트 전송 성공\n{Contour}")
         return
