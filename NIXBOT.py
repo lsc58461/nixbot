@@ -19,7 +19,6 @@ intents.members = True
 client = commands.Bot(command_prefix = ';', intents = intents)
 
 status = cycle(['Produced By JeongYun','LOL PatchNotes'])
-
 Data_PatchNote_File = 'Data.ini'
 Data_URL = "http://nixserver.dothome.co.kr/DATA/Data.ini"
 
