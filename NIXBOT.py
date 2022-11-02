@@ -6,14 +6,18 @@ import configparser
 
 from urllib import request
 from itertools import cycle
-from discord.ext import commands, tasks
+from nextcord.ext import commands, tasks
 from Now_Time import Time
 from Read_Config import Config_Title
 from FTP_TitleName_Post import FTP_Post
 from Crawling_PatchNote import Crawling_URL, Crawling_Title, Crawling_Content, Crawling_Image_URL
 
 config = configparser.ConfigParser()
-client = commands.Bot(command_prefix = ';')
+
+intents = nextcord.Intents.all()
+intents.members = True
+client = commands.Bot(command_prefix = ';', intents = intents)
+
 status = cycle(['Produced By JeongYun','LOL PatchNotes'])
 
 Data_PatchNote_File = 'Data.ini'
@@ -30,16 +34,15 @@ Contour = "---------------------------------------------------------------------
 
 @tasks.loop(seconds=3)
 async def change_status():
-    await client.change_presence(status = discord.Status.online, activity = discord.Game(next(status)))
+    await client.change_presence(status = nextcord.Status.online, activity = nextcord.Game(next(status)))
 
 @tasks.loop(count=1)
 async def Post_PatchNote():
     try:
         channel = client.get_channel(Channel_ID_PatchNote)
-        channel2 = client.get_channel(Channel_ID_PatchNote2)
         
-        MyEmbed = discord.Embed(
-            title = Crawling_Title(),
+        MyEmbed = nextcord.Embed(
+            title = Config_Title(),
             url = Crawling_URL(),
             color = 0x38f2ff
         ).set_thumbnail(
@@ -55,14 +58,14 @@ async def Post_PatchNote():
             url = Crawling_Image_URL()
         )
         await channel.send(embed=MyEmbed)
-        await channel2.send(embed=MyEmbed)
+        print(f"{Time()})  Config_Title\n{Config_Title()}")
         print(f"{Time()})  패치노트 전송 성공\n{Contour}")
         return
     except Exception as ex:
         print(f"{Time()})  Post_PatchNote 에러 발생\n{Time()})    -{ex}\n{Contour}")
         return
     
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=10)
 async def Title_Detected():
     try:
         Get_Server_Save_Title = request.urlopen(Data_URL).read()
